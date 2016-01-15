@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Overlays within Street View</title>
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        height: 100%;
+      }
+#floating-panel {
+  position: absolute;
+  top: 10px;
+  left: 25%;
+  z-index: 5;
+  background-color: #fff;
+  padding: 5px;
+  border: 1px solid #999;
+  text-align: center;
+  font-family: 'Roboto','sans-serif';
+  line-height: 30px;
+  padding-left: 10px;
+}
+
+      #floating-panel {
+        margin-left: -100px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="floating-panel">
+      <input type="button" value="Toggle Street View" onclick="toggleStreetView();"></input>
+    </div>
+    <div id="map"></div>
+    <script>
+var panorama;
+
+function initMap() {
+
+  // Set up the map
+
+    
+    
+    var xhttp;
+    xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (xhttp.readyState == 4 && xhttp.status == 200) {
+          myFunction(xhttp);
+      }
+    };
+    xhttp.open("GET", "wardrive.xml", true);
+    xhttp.send();
+    
+    
+
+
+    
+    
+    
+
+}
+
+function toggleStreetView() {
+  var toggle = panorama.getVisible();
+  if (toggle == false) {
+    panorama.setVisible(true);
+  } else {
+    panorama.setVisible(false);
+  }
+}
+    function Sample()
+    {
+        this.descr ;
+        this.ssid  ;
+        this.bssid ;
+        this.crypt;
+        this.channel ;
+        this.level ;
+        this.lastupdate;
+        this.style;
+        this.coord ;
+
+
+    }
+        
+// FUNCTION myFUNCTION XML
+function myFunction(xml) {
+  var astorPlace = {lat:  51.22116, lng: 4.28262};
+
+      var map = new google.maps.Map(document.getElementById('map'), {
+    center: astorPlace,
+    zoom: 18,
+    streetViewControl: false
+  });
+
+
+    var _list, i, xmlDoc; 
+    xmlDoc = xml.responseXML;
+    console.log("xmlDoc= " + xmlDoc);
+    _list = xmlDoc.childNodes[0];
+        console.log("_list= " + _list);
+
+     var list = _list.getElementsByTagName("Placemark");
+    console.log("list :" + list);
+    console.log(list.length);
+  // Retrieve each customer in turn.
+  for (var i = 0; i < list.length; i++)
+  {
+   var ap = list[i];  
+
+    var crypt = ap.getElementsByTagName("styleUrl")[0].innerHTML;
+       var coordinates = ap.getElementsByTagName("coordinates")[0].innerHTML;
+     
+      
+
+//
+//               descrSplit = descr.Split(stringSeparators, StringSplitOptions.RemoveEmptyEntries);
+//       console.log(descrSplit[0]);
+//      console.log(descrSplit[1]);
+//      console.log(descrSplit[2]);
+//      console.log(descrSplit[3]);
+//      console.log(descrSplit[4]);
+//      console.log(descrSplit[5]);
+//           
+//                tempSample.ssid = descrSplit[0].replace(/<(?:.|\n)*?>/gm, '').Trim();
+//                tempSample.ssid = tempSample.ssid.Replace("SSID: ", "");
+//            tempSample.bssid = descrSplit[1].replace(/<(?:.|\n)*?>/gm, '').Trim();
+//                tempSample.bssid = tempSample.bssid.Replace("BSSID: ", "");
+//            tempSample.crypt = descrSplit[2].replace(/<(?:.|\n)*?>/gm, '').Trim();
+//                tempSample.crypt = tempSample.crypt.Replace("Crypt: ", "");
+//            tempSample.channel = descrSplit[3].replace(/<(?:.|\n)*?>/gm, '').Trim();
+//                tempSample.channel = tempSample.channel.Replace("Channel: ", "");
+//            tempSample.level = descrSplit[4].replace(/<(?:.|\n)*?>/gm, '').Trim();
+//                tempSample.level = tempSample.level.Replace("Level: ", "");
+//            tempSample.lastupdate = descrSplit[5].replace(/<(?:.|\n)*?>/gm, '').Trim();
+//                tempSample.lastupdate = tempSample.lastupdate.Replace("Last Update: ", "");
+//                tempSample.style = list.GetElementsByTagName("styleUrl")[i].InnerText;
+//                tempSample.coord = list.GetElementsByTagName("coordinates")[i].InnerText;
+//
+//    console.log(tempSample.ssid);
+//    console.log(tempSample.bssid);
+//    console.log(tempSample.crypt);
+//    console.log(tempSample.channel);
+//    console.log(tempSample.level);
+//    console.log(tempSample.lastupdate);
+//    console.log(tempSample.style);
+//    console.log(tempSample.coord);
+  
+    var tmp = coordinates.split(',');
+    var longitude = Number(tmp[1]);
+    var latitude = Number(tmp[0]);
+      //security
+      console.log(crypt);
+      console.log(longitude);
+      console.log(latitude);
+    
+//      
+//    GREEN -> WPA2
+//    ORANGE -> WPA
+//    RED -> WEP
+//    BLUE -> OPEN
+//    ELSE -> PURPLE
+//      
+      //icon
+    var iconUrl;
+    if(crypt=="#WPA2")
+        iconUrl = 'http://maps.google.com/mapfiles/ms/icons/green-dot.png';
+    else if(crypt=="#Wep")
+        iconUrl = 'http://maps.google.com/mapfiles/ms/icons/red-dot.png';     
+    else if(crypt=="#WpaPsk")
+        iconUrl = 'http://maps.google.com/mapfiles/ms/icons/orange-dot.png';     
+    else if(crypt=="#Wpa")
+        iconUrl = 'http://maps.google.com/mapfiles/ms/icons/orange-dot.png';     
+    else if(crypt=="#Open")
+        iconUrl = 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png';
+    else        
+        iconUrl = 'http://maps.google.com/mapfiles/ms/icons/purple-dot.png';
+    console.log(iconUrl);
+          
+var _marker = new google.maps.Marker({
+       position: {lat: longitude  , lng:  latitude},
+       map: map,
+       icon: iconUrl,
+       name: "noName"
+   });
+         
+    
+      
+  }
+
+    
+
+        
+    console.log("markers?");
+  // Set up the markers on the map
+  var marker = new google.maps.Marker({
+      position: {lat: 51.22116 , lng: 4.28262},
+      map: map,
+      icon: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
+      title: '1'
+  });
+console.log(marker);
+
+
+  var marker2 = new google.maps.Marker({
+      position: {lat: 51.21410, lng: 4.25126},
+      map: map,
+      icon: 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png',
+      title: '2'
+  });
+
+  var marker3 = new google.maps.Marker({
+      position: {lat: 51.21328, lng: 4.24811},
+      map: map,
+      icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png',
+      title: '3'
+  });
+        
+        // We get the map's default panorama and set up some defaults.
+  // Note that we don't yet set it visible.
+  panorama = map.getStreetView();
+  panorama.setPosition(astorPlace);
+  panorama.setPov(/** @type {google.maps.StreetViewPov} */({
+    heading: 265,
+    pitch: 0
+  }));
+    
+}
+    </script>
+
+
+    
+       <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCX1Ww8CcipKMbOMyekgXzBGylGMx1khJ8 &signed_in=true&callback=initMap"
+        async defer>
+    </script>
+     
+  </body>
+</html>
